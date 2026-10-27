@@ -19,7 +19,7 @@ const assetUrl = (asset: { url: string }) =>
   new URL(asset.url, "https://reference-prompt-studio.lovable.app").href;
 
 /* ===== CONFIGURAÇÃO DA OFERTA — preencha com dados reais ===== */
-const CHECKOUT_URL = ""; // ex: "https://pay.hotmart.com/..."
+const CHECKOUT_URL = "https://pay.cakto.com.br/47qiz8f_1248754";
 const PRICE: { de?: string; por?: string; parcelas?: string } = { de: "R$ 57,90", por: "R$ 17,90" };
 // Preencha com a DATA/HORA REAL de encerramento (ISO com fuso, por exemplo 2026-11-01T23:59:59-03:00).
 // Sem prazo real, o contador de 24 horas não é exibido. Não reinicia a cada visita.
