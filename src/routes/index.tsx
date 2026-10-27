@@ -308,14 +308,14 @@ function Index() {
       <section className="mx-auto max-w-3xl px-5 py-16">
         <h2 className="text-center text-2xl font-extrabold text-secondary sm:text-3xl">Perguntas Frequentes</h2>
         <Accordion type="single" collapsible className="mt-8 space-y-3">
-          {[
+          {([
             ["O produto é físico ou digital?", "É um produto digital entregue em PDF. As fotos de cards plastificados são demonstrações de como o material pode ficar após impressão e plastificação, realizadas por conta do comprador."],
             ["Posso imprimir os cards?", "Sim, para uso pessoal, respeitando as condições de utilização do material."],
             ["Posso estudar pelo celular?", "Sim, em dispositivos que permitam visualizar arquivos PDF."],
             ["O kit substitui um curso de enfermagem?", "Não. É um material complementar de estudo e revisão, não substituindo aulas, protocolos institucionais ou supervisão profissional."],
             ["Como vou receber meu material?", "O acesso é enviado conforme as instruções da plataforma de pagamento informadas no checkout."],
             ["Existe garantia ou reembolso?", "As condições de garantia e reembolso são as informadas no checkout, respeitando os direitos do consumidor previstos em lei."],
-          ] as [string, string][].map(([q, a]) => (
+          ] as [string, string][]).map(([q, a]) => (
             <AccordionItem key={q} value={q} className="rounded-2xl border border-border bg-card px-5">
               <AccordionTrigger className="text-left font-semibold">{q}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground">{a}</AccordionContent>
