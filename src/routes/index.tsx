@@ -318,7 +318,7 @@ function ExampleCommentsCarousel() {
             </article>
           ))}
         </div>
-        <p className="mt-4 text-right text-xs text-muted-foreground">Prévia do layout: fotos e comentários são fictícios, ainda sem avaliações reais de clientes.</p>
+        <p className="mt-4 text-right text-xs text-muted-foreground">Comentários ilustrativos — não são avaliações de compradores.</p>
       </div>
     </section>
   );
