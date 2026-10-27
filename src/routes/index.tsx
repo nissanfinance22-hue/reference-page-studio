@@ -90,10 +90,10 @@ function Carousel() {
     <div>
       <div
         className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-soft"
-        onTouchStart={(e) => { stop(); touch.current = e.touches[0].clientX; }}
+        onTouchStart={(e) => { stop(); touch.current = e.touches[0]?.clientX ?? 0; }}
         onTouchEnd={(e) => {
           if (touch.current === null) return;
-          const dx = e.changedTouches[0].clientX - touch.current;
+          const dx = (e.changedTouches[0]?.clientX ?? 0) - touch.current;
           if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
           touch.current = null;
         }}
@@ -130,7 +130,7 @@ function Carousel() {
       {zoom && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-foreground/90 p-4" onClick={() => setZoom(false)}>
           <button aria-label="Fechar" className="absolute right-4 top-4 rounded-full bg-card p-2 text-foreground"><X /></button>
-          <img src={slides[i].src} alt={slides[i].alt} className="max-h-full max-w-full rounded-xl object-contain" />
+          <img src={slides[i]!.src} alt={slides[i]!.alt} className="max-h-full max-w-full rounded-xl object-contain" />
         </div>
       )}
     </div>
@@ -315,7 +315,7 @@ function Index() {
             ["O kit substitui um curso de enfermagem?", "Não. É um material complementar de estudo e revisão, não substituindo aulas, protocolos institucionais ou supervisão profissional."],
             ["Como vou receber meu material?", "O acesso é enviado conforme as instruções da plataforma de pagamento informadas no checkout."],
             ["Existe garantia ou reembolso?", "As condições de garantia e reembolso são as informadas no checkout, respeitando os direitos do consumidor previstos em lei."],
-          ].map(([q, a]) => (
+          ] as [string, string][].map(([q, a]) => (
             <AccordionItem key={q} value={q} className="rounded-2xl border border-border bg-card px-5">
               <AccordionTrigger className="text-left font-semibold">{q}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground">{a}</AccordionContent>
