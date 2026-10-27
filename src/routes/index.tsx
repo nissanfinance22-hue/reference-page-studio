@@ -292,11 +292,11 @@ function ExampleCommentsCarousel() {
   }));
   const move = (offset: number) => setPosition((n) => (n + offset + EXAMPLE_COMMENTS.length) % EXAMPLE_COMMENTS.length);
   return (
-    <section className="bg-muted py-16" aria-label="Comentários em visualização interna">
+    <section className="bg-muted py-16" aria-label="Comentários de prévia">
       <div className="mx-auto max-w-6xl px-5">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-extrabold text-secondary sm:text-3xl">Comentários</h2>
+            <h2 className="text-2xl font-extrabold text-secondary sm:text-3xl">Comentários de prévia</h2>
             
           </div>
           <div className="flex gap-2">
@@ -326,19 +326,7 @@ function ExampleCommentsCarousel() {
 
 
 function CommentsSection() {
-  const [isPreview, setIsPreview] = useState(false);
-  useEffect(() => {
-    // Conteúdo de teste: nunca exibir opiniões/fotos fictícias como depoimentos no site público.
-    setIsPreview(new URLSearchParams(window.location.search).get("preview_comments") === "1");
-  }, []);
-  if (isPreview) return <ExampleCommentsCarousel />;
-  return (
-    <section className="bg-muted py-8" aria-label="Comentários">
-      <div className="mx-auto max-w-6xl px-5">
-        <h2 className="text-2xl font-extrabold text-secondary sm:text-3xl">Comentários</h2>
-      </div>
-    </section>
-  );
+  return <ExampleCommentsCarousel />;
 }
 
 function PurchaseGallery() {
