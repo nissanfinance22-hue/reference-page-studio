@@ -181,3 +181,8 @@
 }
 body { font-family: var(--font-sans); }
 h1, h2, h3 { font-family: var(--font-display); }
+
+/* Flutuação sutil para o mockup do produto; respeita acessibilidade. */
+@keyframes product-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.animate-box-float { animation: product-float 5s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .animate-box-float { animation: none; } }
