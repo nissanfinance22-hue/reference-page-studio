@@ -328,7 +328,7 @@ function ExampleCommentsCarousel() {
 function PurchaseGallery() {
   const images = [
     { src: assetUrl(boxKit), alt: "Box premium Enfermagem Visual com 200 cards ilustrativos" },
-    { src: "/images/cards-caseiros.webp", alt: "Cards ilustrativos do kit organizados sobre uma mesa de casa" },
+    { src: assetUrl(funil), alt: "Cards ilustrativos do kit em ambiente de estudo caseiro" },
   ];
   const [active, setActive] = useState(0);
   useEffect(() => {
