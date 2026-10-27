@@ -109,6 +109,7 @@ const EXAMPLE_COMMENTS: ExampleComment[] = [
   }
 ];
 // Fotos genéricas de banco para teste visual. Nenhum rosto representa comprador ou autor do comentário.
+const DEMO_NAMES = ["Camila M.","Juliana F.","Rafael A.","Fernanda S.","Patrícia L.","Lucas R.","Renata C.","Bruno P.","Amanda V.","Bianca N.","André S.","Larissa G.","Matheus B.","Vanessa C.","Marina T.","Gabriel P.","Isabela D.","Daniel S.","Paula C.","Carolina R."] as const;
 const DEMO_PHOTOS = [
   "https://randomuser.me/api/portraits/women/44.jpg",
   "https://randomuser.me/api/portraits/women/21.jpg",
@@ -295,10 +296,8 @@ function ExampleCommentsCarousel() {
       <div className="mx-auto max-w-6xl px-5">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-extrabold text-secondary sm:text-3xl">PRÉVIA DO ESPAÇO DE AVALIAÇÕES</h2>
-            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              <strong>DEMONSTRAÇÃO:</strong> fotos de banco de imagens e textos fictícios para testar o layout. Estas pessoas não compraram nem recomendaram o produto.
-            </p>
+            <h2 className="text-2xl font-extrabold text-secondary sm:text-3xl">RELATOS SOBRE A ROTINA DE ESTUDOS</h2>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">Um espaço preparado para futuras avaliações e experiências de estudo.</p>
           </div>
           <div className="flex gap-2">
             <button type="button" aria-label="Comentário anterior" onClick={() => move(-1)} className="grid h-11 w-11 place-items-center rounded-full border border-border bg-card text-secondary hover:border-primary"><ChevronLeft /></button>
@@ -311,17 +310,47 @@ function ExampleCommentsCarousel() {
               <div className="mb-4 flex items-center gap-3">
                 <img src={DEMO_PHOTOS[(item.number - 1) % DEMO_PHOTOS.length]} alt="Foto de perfil de banco de imagens para demonstração" className="h-12 w-12 rounded-full border-2 border-primary/20 object-cover" loading="lazy" referrerPolicy="no-referrer" />
                 <div>
-                  <p className="font-bold text-secondary">{item.titulo}</p>
-                  <p className="text-xs text-muted-foreground">Foto e comentário de demonstração</p>
+                  <p className="font-bold text-secondary">{DEMO_NAMES[(item.number - 1) % DEMO_NAMES.length]}</p>
+                  
                 </div>
               </div>
               <p className="min-h-16 text-sm leading-relaxed text-foreground">“{item.texto}”</p>
             </article>
           ))}
         </div>
-        <p className="mt-4 text-right text-xs text-muted-foreground">Modelo {position + 1} de {EXAMPLE_COMMENTS.length} · substitua por avaliações verdadeiras e autorizadas.</p>
+        <p className="mt-4 text-right text-xs text-muted-foreground">Prévia do layout: fotos e comentários são fictícios, ainda sem avaliações reais de clientes.</p>
       </div>
     </section>
+  );
+}
+
+
+function PurchaseGallery() {
+  const images = [
+    { src: assetUrl(boxKit), alt: "Box premium Enfermagem Visual com 200 cards ilustrativos" },
+    { src: "/images/cards-caseiros.webp", alt: "Cards ilustrativos do kit organizados sobre uma mesa de casa" },
+  ];
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => setActive((n) => (n + 1) % images.length), 5500);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <div className="relative mx-auto w-full max-w-[360px]">
+      <div className="relative h-[180px] overflow-hidden rounded-xl bg-muted sm:h-[195px]">
+        {images.map((photo, i) => (
+          <img key={photo.src} src={photo.src} alt={photo.alt} loading={i === 0 ? "eager" : "lazy"}
+            className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-700 ${i === active ? "opacity-100" : "opacity-0"}`} />
+        ))}
+        <button type="button" aria-label="Foto anterior" onClick={() => setActive((n) => (n + images.length - 1) % images.length)} className="absolute left-2 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-card/90 shadow"><ChevronLeft className="h-5 w-5" /></button>
+        <button type="button" aria-label="Próxima foto" onClick={() => setActive((n) => (n + 1) % images.length)} className="absolute right-2 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-card/90 shadow"><ChevronRight className="h-5 w-5" /></button>
+      </div>
+      <div className="mt-2 flex justify-center gap-2">
+        {images.map((photo, i) => (
+          <button key={photo.src} type="button" onClick={() => setActive(i)} aria-label={`Mostrar foto ${i + 1}`} aria-current={i === active ? "true" : undefined} className={`h-2 rounded-full transition-all ${i === active ? "w-8 bg-primary" : "w-2 bg-primary/30"}`} />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -362,7 +391,7 @@ function Index() {
             <p className="mt-6 font-script text-2xl sm:text-3xl">Seu próximo passo nos estudos começa com uma revisão mais organizada. ♡</p>
             <CTA className="mt-8">Quero meu kit completo</CTA>
           </div>
-          <img src={assetUrl(boxKit)} alt="Box oficial do Enfermagem Visual" className="animate-box-float mx-auto max-h-[255px] w-full max-w-[200px] object-contain drop-shadow-2xl sm:max-h-[295px] sm:max-w-[250px]" />
+          <img src={assetUrl(boxKit)} alt="Box oficial do Enfermagem Visual" className="animate-box-float mx-auto max-h-[315px] w-full max-w-[260px] object-contain drop-shadow-2xl sm:max-h-[370px] sm:max-w-[330px]" />
         </div>
       </section>
 
@@ -374,8 +403,8 @@ function Index() {
           <div className="mx-auto max-w-lg"><Carousel /></div>
         </div>
         <div className="h-fit rounded-3xl border-2 border-primary/30 bg-card p-4 shadow-soft sm:p-5 lg:sticky lg:top-6">
-          <div className="grid grid-cols-[100px_1fr] items-center gap-3 sm:grid-cols-[150px_1fr]">
-            <img src={assetUrl(boxKit)} alt="Box oficial do Kit Enfermagem Visual" className="animate-box-float mx-auto max-h-[150px] w-full object-contain drop-shadow-lg sm:max-h-[185px]" loading="eager" />
+          <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center gap-3">
+            <PurchaseGallery />
             <div className="min-w-0">
               <span className="inline-flex rounded-full bg-gold px-2.5 py-1 text-[10px] font-extrabold uppercase text-accent-foreground sm:text-xs">Kit completo de enfermagem</span>
               <h3 className="mt-2 text-lg font-extrabold leading-tight text-secondary sm:text-xl">200 Cards Ilustrativos</h3>
@@ -412,7 +441,8 @@ function Index() {
       {/* BENEFÍCIOS */}
       <section className="bg-muted py-16">
         <div className="mx-auto max-w-6xl px-5">
-          <h2 className="text-center text-2xl font-extrabold text-secondary sm:text-3xl">SEUS ESTUDOS DE ENFERMAGEM MERECEM MAIS ORGANIZAÇÃO.</h2>
+          <h2 className="text-center text-2xl font-extrabold text-secondary sm:text-3xl">O MÉTODO 100% VISUAL PARA ESTUDAR ENFERMAGEM DE UM JEITO MAIS SIMPLES E FÁCIL</h2>
+          <p className="mx-auto mt-4 max-w-3xl text-center text-muted-foreground">Estude com cards ilustrativos, revise com praticidade e tenha os principais conteúdos organizados em um só lugar.</p>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {[
               [Brain, "Aprendizado visual", "Ilustrações e esquemas que ajudam a compreender assuntos importantes."],
