@@ -25,115 +25,6 @@ const PRICE: { de?: string; por?: string; parcelas?: string } = { de: "R$ 57,90"
 // Sem prazo real, o contador de 24 horas não é exibido. Não reinicia a cada visita.
 const PROMO_END_AT = "";
 const BONUS: { nome: string; descricao: string }[] = []; // bônus reais
-type ExampleComment = { titulo: string; texto: string };
-const EXAMPLE_COMMENTS: ExampleComment[] = [
-  {
-    "titulo": "Exemplo ilustrativo 01",
-    "texto": "Gostaria de revisar sinais vitais com ilustrações e explicações curtas."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 02",
-    "texto": "Ter os assuntos divididos por categoria pode facilitar a organização."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 03",
-    "texto": "Uma folha visual ajuda a localizar rapidamente o tema que quero revisar."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 04",
-    "texto": "Acho prático conseguir estudar pelo celular nos intervalos."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 05",
-    "texto": "Ter opção de imprimir os cards pode ajudar na preparação para provas."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 06",
-    "texto": "Prefiro esquemas coloridos para relembrar os conceitos."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 07",
-    "texto": "Uma coleção por assunto pode tornar a revisão mais direcionada."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 08",
-    "texto": "Gosto de materiais que apresentam informações de forma objetiva."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 09",
-    "texto": "Ver exemplos ilustrados ajuda a conectar teoria e prática."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 10",
-    "texto": "É bom ter uma opção de estudo que não dependa de vídeo."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 11",
-    "texto": "A organização do conteúdo faz diferença para criar rotina."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 12",
-    "texto": "Os temas de biossegurança são importantes na minha revisão."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 13",
-    "texto": "Gostaria de revisar anatomia com imagens e legendas."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 14",
-    "texto": "Praticar questões visuais parece uma forma interessante de aprender."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 15",
-    "texto": "A possibilidade de imprimir me permite montar fichas de estudo."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 16",
-    "texto": "É útil consultar conteúdos essenciais antes de um estágio."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 17",
-    "texto": "Um PDF organizado pode ajudar a revisar de onde estiver."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 18",
-    "texto": "Prefiro revisar um assunto de cada vez para manter o foco."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 19",
-    "texto": "Cards ilustrados podem deixar o processo de estudo mais agradável."
-  },
-  {
-    "titulo": "Exemplo ilustrativo 20",
-    "texto": "É interessante ter os tópicos de enfermagem reunidos num só material."
-  }
-];
-// Fotos genéricas de banco para teste visual. Nenhum rosto representa comprador ou autor do comentário.
-const DEMO_NAMES = ["Camila M.","Juliana F.","Rafael A.","Fernanda S.","Patrícia L.","Lucas R.","Renata C.","Bruno P.","Amanda V.","Bianca N.","André S.","Larissa G.","Matheus B.","Vanessa C.","Marina T.","Gabriel P.","Isabela D.","Daniel S.","Paula C.","Carolina R."] as const;
-const DEMO_PHOTOS = [
-  "https://randomuser.me/api/portraits/women/44.jpg",
-  "https://randomuser.me/api/portraits/women/21.jpg",
-  "https://randomuser.me/api/portraits/men/32.jpg",
-  "https://randomuser.me/api/portraits/women/68.jpg",
-  "https://randomuser.me/api/portraits/women/55.jpg",
-  "https://randomuser.me/api/portraits/men/12.jpg",
-  "https://randomuser.me/api/portraits/women/14.jpg",
-  "https://randomuser.me/api/portraits/men/63.jpg",
-  "https://randomuser.me/api/portraits/women/35.jpg",
-  "https://randomuser.me/api/portraits/women/72.jpg",
-  "https://randomuser.me/api/portraits/men/37.jpg",
-  "https://randomuser.me/api/portraits/women/47.jpg",
-  "https://randomuser.me/api/portraits/men/70.jpg",
-  "https://randomuser.me/api/portraits/women/52.jpg",
-  "https://randomuser.me/api/portraits/women/64.jpg",
-  "https://randomuser.me/api/portraits/men/47.jpg",
-  "https://randomuser.me/api/portraits/women/30.jpg",
-  "https://randomuser.me/api/portraits/men/44.jpg",
-  "https://randomuser.me/api/portraits/women/79.jpg",
-  "https://randomuser.me/api/portraits/women/61.jpg",
-] as const;
-// Estes 20 textos são exemplos de layout, NÃO são depoimentos de compradores.
-// Substitua por depoimentos reais com autorização antes de apresentar como prova social.
 /* ============================================================= */
 
 const TITLE = "Enfermagem Visual — Kit com 200 Cards Ilustrativos";
@@ -280,50 +171,15 @@ function PromoCountdown() {
   );
 }
 
-function ExampleCommentsCarousel() {
-  const [position, setPosition] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => setPosition((n) => (n + 1) % EXAMPLE_COMMENTS.length), 5500);
-    return () => clearInterval(interval);
-  }, []);
-  const visible = [0, 1, 2].map((offset) => ({
-    ...EXAMPLE_COMMENTS[(position + offset) % EXAMPLE_COMMENTS.length]!,
-    number: (position + offset) % EXAMPLE_COMMENTS.length + 1,
-  }));
-  const move = (offset: number) => setPosition((n) => (n + offset + EXAMPLE_COMMENTS.length) % EXAMPLE_COMMENTS.length);
+function CommentsSection() {
   return (
-    <section className="bg-muted py-16" aria-label="Comentários de demonstração">
+    <section className="bg-muted py-8" aria-label="Comentários">
       <div className="mx-auto max-w-6xl px-5">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-extrabold text-secondary sm:text-3xl">RELATOS SOBRE A ROTINA DE ESTUDOS</h2>
-            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">Um espaço preparado para futuras avaliações e experiências de estudo.</p>
-          </div>
-          <div className="flex gap-2">
-            <button type="button" aria-label="Comentário anterior" onClick={() => move(-1)} className="grid h-11 w-11 place-items-center rounded-full border border-border bg-card text-secondary hover:border-primary"><ChevronLeft /></button>
-            <button type="button" aria-label="Próximo comentário" onClick={() => move(1)} className="grid h-11 w-11 place-items-center rounded-full border border-border bg-card text-secondary hover:border-primary"><ChevronRight /></button>
-          </div>
-        </div>
-        <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
-          {visible.map((item, i) => (
-            <article key={item.number} className={`rounded-2xl border border-border bg-card p-6 shadow-soft ${i > 0 ? "hidden md:block" : ""}`}>
-              <div className="mb-4 flex items-center gap-3">
-                <img src={DEMO_PHOTOS[(item.number - 1) % DEMO_PHOTOS.length]} alt="Foto de perfil de banco de imagens para demonstração" className="h-12 w-12 rounded-full border-2 border-primary/20 object-cover" loading="lazy" referrerPolicy="no-referrer" />
-                <div>
-                  <p className="font-bold text-secondary">{DEMO_NAMES[(item.number - 1) % DEMO_NAMES.length]}</p>
-                  
-                </div>
-              </div>
-              <p className="min-h-16 text-sm leading-relaxed text-foreground">“{item.texto}”</p>
-            </article>
-          ))}
-        </div>
-        <p className="mt-4 text-right text-xs text-muted-foreground">Comentários ilustrativos — não são avaliações de compradores.</p>
+        <h2 className="text-2xl font-extrabold text-secondary sm:text-3xl">Comentários</h2>
       </div>
     </section>
   );
 }
-
 
 function PurchaseGallery() {
   const images = [
@@ -464,7 +320,7 @@ function Index() {
       </section>
 
       {/* Demonstração de comentários; não representa compradores reais */}
-      <ExampleCommentsCarousel />
+      <CommentsSection />
 
       {/* CATEGORIAS */}
       <section className="mx-auto max-w-6xl px-5 py-16">
