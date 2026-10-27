@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Resolve Lovable asset pointer paths against the published Lovable origin for product images, so external deployments do not request Lovable-only paths from their own host.

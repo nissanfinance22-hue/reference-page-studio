@@ -13,6 +13,10 @@ import card03 from "@/assets/03_card.png.asset.json";
 import pln02 from "@/assets/PLN_02.png.asset.json";
 import funil from "@/assets/plr_funil.png.asset.json";
 
+// Asset paths are served by Lovable, not by external hosts such as Vercel.
+const assetUrl = (asset: { url: string }) =>
+  new URL(asset.url, "https://reference-prompt-studio.lovable.app").href;
+
 /* ===== CONFIGURAÇÃO DA OFERTA — preencha com dados reais ===== */
 const CHECKOUT_URL = ""; // ex: "https://pay.hotmart.com/..."
 const PRICE: { de?: string; por?: string; parcelas?: string } = {}; // ex: { de: "R$ 97", por: "R$ 37", parcelas: "ou 5x de R$ 8,20" }
@@ -45,10 +49,10 @@ export const Route = createFileRoute("/")({
 });
 
 const slides = [
-  { src: card03.url, alt: "Página de cards de Sinais Vitais" },
-  { src: capa.url, alt: "Capa do kit Enfermagem Visual" },
-  { src: funil.url, alt: "Cards impressos sobre a mesa de estudo" },
-  { src: pln02.url, alt: "Estudantes revisando com os cards" },
+  { src: assetUrl(card03), alt: "Página de cards de Sinais Vitais" },
+  { src: assetUrl(capa), alt: "Capa do kit Enfermagem Visual" },
+  { src: assetUrl(funil), alt: "Cards impressos sobre a mesa de estudo" },
+  { src: assetUrl(pln02), alt: "Estudantes revisando com os cards" },
 ];
 
 const categorias = [
@@ -180,7 +184,7 @@ function Index() {
             <p className="mt-6 font-script text-2xl sm:text-3xl">Seu próximo passo nos estudos começa com uma revisão mais organizada. ♡</p>
             <CTA className="mt-8">Quero meu kit completo</CTA>
           </div>
-          <img src={capa.url} alt="Capa oficial Enfermagem Visual" className="mx-auto w-full max-w-[260px] sm:max-w-xs rotate-2 rounded-2xl shadow-2xl" />
+          <img src={assetUrl(capa)} alt="Capa oficial Enfermagem Visual" className="mx-auto w-full max-w-[260px] sm:max-w-xs rotate-2 rounded-2xl shadow-2xl" />
         </div>
       </section>
 
@@ -192,7 +196,7 @@ function Index() {
           <div className="mx-auto max-w-lg"><Carousel /></div>
         </div>
         <div className="h-fit rounded-3xl border-2 border-primary/30 bg-card p-6 shadow-soft lg:sticky lg:top-6">
-          <div className="flex items-center gap-4"><img src={capa.url} alt="Capa do kit" className="h-24 w-24 shrink-0 rounded-xl object-cover shadow-soft" /><span className="rounded-full bg-gold px-3 py-1 text-xs font-bold uppercase text-accent-foreground">Kit completo + bônus</span></div>
+          <div className="flex items-center gap-4"><img src={assetUrl(capa)} alt="Capa do kit" className="h-24 w-24 shrink-0 rounded-xl object-cover shadow-soft" /><span className="rounded-full bg-gold px-3 py-1 text-xs font-bold uppercase text-accent-foreground">Kit completo + bônus</span></div>
           <h3 className="mt-5 text-2xl font-extrabold text-secondary">Enfermagem Visual — Kit com 200 Cards Ilustrativos</h3>
           {REVIEWS.length > 0 && (
             <div className="mt-2 flex items-center gap-1 text-accent">
@@ -292,7 +296,7 @@ function Index() {
       {/* EMOCIONAL */}
       <section className="bg-hero text-primary-foreground">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-[1fr_1.4fr] md:items-center">
-          <img src={funil.url} alt="Estudante revisando com os cards impressos" className="mx-auto w-full max-w-sm rounded-3xl shadow-2xl" loading="lazy" />
+          <img src={assetUrl(funil)} alt="Estudante revisando com os cards impressos" className="mx-auto w-full max-w-sm rounded-3xl shadow-2xl" loading="lazy" />
           <div>
             <h2 className="text-3xl font-extrabold leading-tight sm:text-4xl">MENOS TEMPO PROCURANDO CONTEÚDO. <span className="text-accent">MAIS PRATICIDADE PARA REVISAR.</span></h2>
             <p className="mt-5 text-lg text-secondary-foreground/90">
