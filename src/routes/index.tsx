@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowRight, BookOpen, Brain, CheckCircle2, ChevronLeft, ChevronRight, ClipboardCheck,
-  FolderOpen, HeartPulse, Printer, ShoppingCart, Smartphone, Star, X, Bone, ShieldPlus,
+  FolderOpen, HeartPulse, Printer, ShoppingCart, Smartphone, X, Bone, ShieldPlus,
   Pill, Bandage, UserRound, Siren, Baby, FileText, GraduationCap, Zap, Lock, Headset, HeartHandshake,
 } from "lucide-react";
 import {
@@ -108,6 +108,30 @@ const EXAMPLE_COMMENTS: ExampleComment[] = [
     "texto": "É interessante ter os tópicos de enfermagem reunidos num só material."
   }
 ];
+// Fotos genéricas de banco para teste visual. Nenhum rosto representa comprador ou autor do comentário.
+const DEMO_NAMES = ["Camila M.","Juliana F.","Rafael A.","Fernanda S.","Patrícia L.","Lucas R.","Renata C.","Bruno P.","Amanda V.","Bianca N.","André S.","Larissa G.","Matheus B.","Vanessa C.","Marina T.","Gabriel P.","Isabela D.","Daniel S.","Paula C.","Carolina R."] as const;
+const DEMO_PHOTOS = [
+  "https://randomuser.me/api/portraits/women/44.jpg",
+  "https://randomuser.me/api/portraits/women/21.jpg",
+  "https://randomuser.me/api/portraits/men/32.jpg",
+  "https://randomuser.me/api/portraits/women/68.jpg",
+  "https://randomuser.me/api/portraits/women/55.jpg",
+  "https://randomuser.me/api/portraits/men/12.jpg",
+  "https://randomuser.me/api/portraits/women/14.jpg",
+  "https://randomuser.me/api/portraits/men/63.jpg",
+  "https://randomuser.me/api/portraits/women/35.jpg",
+  "https://randomuser.me/api/portraits/women/72.jpg",
+  "https://randomuser.me/api/portraits/men/37.jpg",
+  "https://randomuser.me/api/portraits/women/47.jpg",
+  "https://randomuser.me/api/portraits/men/70.jpg",
+  "https://randomuser.me/api/portraits/women/52.jpg",
+  "https://randomuser.me/api/portraits/women/64.jpg",
+  "https://randomuser.me/api/portraits/men/47.jpg",
+  "https://randomuser.me/api/portraits/women/30.jpg",
+  "https://randomuser.me/api/portraits/men/44.jpg",
+  "https://randomuser.me/api/portraits/women/79.jpg",
+  "https://randomuser.me/api/portraits/women/61.jpg",
+] as const;
 // Estes 20 textos são exemplos de layout, NÃO são depoimentos de compradores.
 // Substitua por depoimentos reais com autorização antes de apresentar como prova social.
 /* ============================================================= */
@@ -272,10 +296,8 @@ function ExampleCommentsCarousel() {
       <div className="mx-auto max-w-6xl px-5">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-extrabold text-secondary sm:text-3xl">IMAGINE SEUS MOMENTOS DE REVISÃO</h2>
-            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              Frases ilustrativas sobre estudar com cards. Estes são exemplos fictícios de apresentação — não são avaliações de clientes.
-            </p>
+            <h2 className="text-2xl font-extrabold text-secondary sm:text-3xl">RELATOS SOBRE A ROTINA DE ESTUDOS</h2>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">Um espaço preparado para futuras avaliações e experiências de estudo.</p>
           </div>
           <div className="flex gap-2">
             <button type="button" aria-label="Comentário anterior" onClick={() => move(-1)} className="grid h-11 w-11 place-items-center rounded-full border border-border bg-card text-secondary hover:border-primary"><ChevronLeft /></button>
@@ -286,19 +308,49 @@ function ExampleCommentsCarousel() {
           {visible.map((item, i) => (
             <article key={item.number} className={`rounded-2xl border border-border bg-card p-6 shadow-soft ${i > 0 ? "hidden md:block" : ""}`}>
               <div className="mb-4 flex items-center gap-3">
-                <div aria-hidden="true" className="grid h-12 w-12 place-items-center rounded-full bg-primary/15 text-primary"><UserRound className="h-6 w-6" /></div>
+                <img src={DEMO_PHOTOS[(item.number - 1) % DEMO_PHOTOS.length]} alt="Foto de perfil de banco de imagens para demonstração" className="h-12 w-12 rounded-full border-2 border-primary/20 object-cover" loading="lazy" referrerPolicy="no-referrer" />
                 <div>
-                  <p className="font-bold text-secondary">{item.titulo}</p>
-                  <p className="text-xs text-muted-foreground">Simulação de texto · não verificado</p>
+                  <p className="font-bold text-secondary">{DEMO_NAMES[(item.number - 1) % DEMO_NAMES.length]}</p>
+                  
                 </div>
               </div>
               <p className="min-h-16 text-sm leading-relaxed text-foreground">“{item.texto}”</p>
             </article>
           ))}
         </div>
-        <p className="mt-4 text-right text-xs text-muted-foreground">Exemplo {position + 1} de {EXAMPLE_COMMENTS.length} · substitua por opiniões reais e autorizadas após as primeiras vendas.</p>
+        <p className="mt-4 text-right text-xs text-muted-foreground">Comentários ilustrativos — não são avaliações de compradores.</p>
       </div>
     </section>
+  );
+}
+
+
+function PurchaseGallery() {
+  const images = [
+    { src: assetUrl(boxKit), alt: "Box premium Enfermagem Visual com 200 cards ilustrativos" },
+    { src: assetUrl(funil), alt: "Cards ilustrativos do kit em ambiente de estudo caseiro" },
+  ];
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => setActive((n) => (n + 1) % images.length), 5500);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <div className="relative mx-auto w-full max-w-[360px]">
+      <div className="relative h-[180px] overflow-hidden rounded-xl bg-muted sm:h-[195px]">
+        {images.map((photo, i) => (
+          <img key={photo.src} src={photo.src} alt={photo.alt} loading={i === 0 ? "eager" : "lazy"}
+            className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-700 ${i === active ? "opacity-100" : "opacity-0"}`} />
+        ))}
+        <button type="button" aria-label="Foto anterior" onClick={() => setActive((n) => (n + images.length - 1) % images.length)} className="absolute left-2 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-card/90 shadow"><ChevronLeft className="h-5 w-5" /></button>
+        <button type="button" aria-label="Próxima foto" onClick={() => setActive((n) => (n + 1) % images.length)} className="absolute right-2 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-card/90 shadow"><ChevronRight className="h-5 w-5" /></button>
+      </div>
+      <div className="mt-2 flex justify-center gap-2">
+        {images.map((photo, i) => (
+          <button key={photo.src} type="button" onClick={() => setActive(i)} aria-label={`Mostrar foto ${i + 1}`} aria-current={i === active ? "true" : undefined} className={`h-2 rounded-full transition-all ${i === active ? "w-8 bg-primary" : "w-2 bg-primary/30"}`} />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -307,7 +359,7 @@ function Index() {
     <main className="overflow-x-hidden pb-24 md:pb-0">
       {/* HERO */}
       <section className="relative bg-hero text-primary-foreground">
-        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1.2fr_1fr] md:items-center md:py-20">
+        <div className="relative mx-auto grid max-w-6xl gap-6 px-5 py-10 md:grid-cols-[1.2fr_1fr] md:items-center md:py-12">
           <div>
             <div className="mb-6 flex items-center gap-2 font-display text-sm font-bold uppercase tracking-widest">
               <HeartPulse className="h-7 w-7 text-accent" /> Enfermagem Visual
@@ -339,63 +391,58 @@ function Index() {
             <p className="mt-6 font-script text-2xl sm:text-3xl">Seu próximo passo nos estudos começa com uma revisão mais organizada. ♡</p>
             <CTA className="mt-8">Quero meu kit completo</CTA>
           </div>
-          <img src={assetUrl(boxKit)} alt="Box oficial do Enfermagem Visual" className="animate-box-float mx-auto w-full max-w-[300px] object-contain drop-shadow-2xl sm:max-w-md" />
+          <img src={assetUrl(boxKit)} alt="Box oficial do Enfermagem Visual" className="animate-box-float mx-auto max-h-[315px] w-full max-w-[260px] object-contain drop-shadow-2xl sm:max-h-[370px] sm:max-w-[330px]" />
         </div>
       </section>
 
       {/* VITRINE */}
-      <section id="comprar" className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-2 md:items-start">
+      <section id="comprar" className="mx-auto grid max-w-6xl gap-7 px-5 py-10 md:grid-cols-2 md:items-start">
         <div>
           <h2 className="text-2xl font-extrabold text-secondary sm:text-3xl">VEJA COMO É ESTUDAR COM O ENFERMAGEM VISUAL</h2>
           <p className="mb-6 mt-2 text-muted-foreground">Cada página reúne conteúdos ilustrados para facilitar sua rotina de revisão.</p>
           <div className="mx-auto max-w-lg"><Carousel /></div>
         </div>
-        <div className="h-fit rounded-3xl border-2 border-primary/30 bg-card p-6 shadow-soft lg:sticky lg:top-6">
-          <div className="relative mx-auto w-full max-w-[360px]">
-            <img src={assetUrl(boxKit)} alt="Box premium do Kit Enfermagem Visual — 200 cards ilustrativos" className="animate-box-float mx-auto w-full object-contain drop-shadow-2xl" />
-            <div className="absolute bottom-2 right-0 rounded-2xl border border-white/80 bg-card/95 px-4 py-3 text-center shadow-xl backdrop-blur">
-              <p className="text-[11px] font-extrabold uppercase tracking-wider text-primary">Super oferta</p>
-              <p className="text-sm text-muted-foreground">De <span className="line-through">{PRICE.de}</span></p>
-              <p className="font-display text-3xl font-extrabold leading-tight text-primary">{PRICE.por}</p>
+        <div className="h-fit rounded-3xl border-2 border-primary/30 bg-card p-4 shadow-soft sm:p-5 lg:sticky lg:top-6">
+          <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center gap-3">
+            <PurchaseGallery />
+            <div className="min-w-0">
+              <span className="inline-flex rounded-full bg-gold px-2.5 py-1 text-[10px] font-extrabold uppercase text-accent-foreground sm:text-xs">Kit completo de enfermagem</span>
+              <h3 className="mt-2 text-lg font-extrabold leading-tight text-secondary sm:text-xl">200 Cards Ilustrativos</h3>
+              <p className="mt-1 text-xs text-muted-foreground sm:text-sm">10 categorias, incluindo 20 desafios de revisão. Arquivo digital em PDF.</p>
             </div>
           </div>
-          <span className="mt-3 inline-flex rounded-full bg-gold px-3 py-1 text-xs font-bold uppercase text-accent-foreground">
-            {BONUS.length ? "Kit completo + bônus" : "Kit completo — 200 cards"}
-          </span>
-          <h3 className="mt-5 text-2xl font-extrabold text-secondary">Enfermagem Visual — Kit com 200 Cards Ilustrativos</h3>
-          <p className="mt-3 text-muted-foreground">
-            Um material digital para quem deseja revisar conteúdos essenciais de enfermagem com ilustrações, esquemas e explicações objetivas.
-          </p>
-          <ul className="mt-5 space-y-2.5">
-            {["200 cards ilustrativos", "10 categorias de estudo", "Material organizado por assuntos", "PDF para consulta digital e impressão", "Revisões rápidas para provas e estágios"].map((b) => (
-              <li key={b} className="flex items-center gap-3 rounded-xl bg-muted px-4 py-2.5 font-medium"><CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />{b}</li>
+          <div className="mt-3 flex flex-wrap items-end justify-between gap-3 rounded-2xl border border-primary/25 bg-muted px-4 py-3">
+            <div>
+              <p className="font-display text-xs font-extrabold uppercase tracking-wider text-secondary">Oferta do kit</p>
+              {PRICE.de && <p className="mt-1 text-sm text-muted-foreground">De <span className="line-through">{PRICE.de}</span></p>}
+              <p className="font-display text-4xl font-extrabold leading-none text-primary sm:text-5xl">{PRICE.por}</p>
+            </div>
+            <span className="rounded-lg bg-gold px-3 py-2 text-sm font-extrabold text-accent-foreground">200 cards</span>
+          </div>
+          <CTA className="mt-3 w-full px-3 py-3 text-sm sm:text-base">Comprar agora — R$ 17,90</CTA>
+          <p className="mt-2 text-center text-xs text-muted-foreground">Produto digital • Checkout da Cakto</p>
+          <PromoCountdown />
+          <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+            {["200 cards ilustrados", "10 categorias", "PDF para consulta e impressão", "20 desafios incluídos"].map((benefit) => (
+              <li key={benefit} className="flex items-center gap-2 rounded-xl bg-muted px-3 py-2 text-xs font-semibold">
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />{benefit}
+              </li>
             ))}
           </ul>
           {BONUS.length > 0 && (
-            <div className="mt-5 rounded-2xl bg-muted p-4">
-              <p className="font-display font-bold text-secondary">Bônus incluídos</p>
-              {BONUS.map((b) => <p key={b.nome} className="mt-2 text-sm"><b>{b.nome}</b> — {b.descricao}</p>)}
+            <div className="mt-4 rounded-xl bg-muted p-3">
+              <p className="font-bold text-secondary">Bônus incluídos</p>
+              {BONUS.map((b) => <p key={b.nome} className="mt-1 text-xs"><strong>{b.nome}</strong> — {b.descricao}</p>)}
             </div>
           )}
-          {PRICE.por && (
-            <div className="mt-6 rounded-2xl border-2 border-primary/20 bg-muted p-5 text-center">
-              <p className="font-display text-xs font-extrabold uppercase tracking-widest text-secondary">Super oferta especial</p>
-              {PRICE.de && <p className="mt-2 text-muted-foreground">De <span className="line-through">{PRICE.de}</span></p>}
-              <p className="font-display mt-1 text-5xl font-extrabold text-primary">{PRICE.por}</p>
-              {PRICE.parcelas && <p className="text-sm text-muted-foreground">{PRICE.parcelas}</p>}
-              <p className="mt-2 text-xs text-muted-foreground">Preço informado pelo vendedor. O valor definitivo é confirmado no checkout.</p>
-              <PromoCountdown />
-            </div>
-          )}
-          <CTA className="mt-6 w-full">Quero meu kit completo</CTA>
-          <p className="mt-3 text-center text-xs text-muted-foreground">Produto digital • Receba conforme as condições informadas no checkout</p>
         </div>
       </section>
 
       {/* BENEFÍCIOS */}
       <section className="bg-muted py-16">
         <div className="mx-auto max-w-6xl px-5">
-          <h2 className="text-center text-2xl font-extrabold text-secondary sm:text-3xl">SEUS ESTUDOS DE ENFERMAGEM MERECEM MAIS ORGANIZAÇÃO.</h2>
+          <h2 className="text-center text-2xl font-extrabold text-secondary sm:text-3xl">O MÉTODO 100% VISUAL PARA ESTUDAR ENFERMAGEM DE UM JEITO MAIS SIMPLES E FÁCIL</h2>
+          <p className="mx-auto mt-4 max-w-3xl text-center text-muted-foreground">Estude com cards ilustrativos, revise com praticidade e tenha os principais conteúdos organizados em um só lugar.</p>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {[
               [Brain, "Aprendizado visual", "Ilustrações e esquemas que ajudam a compreender assuntos importantes."],
