@@ -18,7 +18,13 @@ const CHECKOUT_URL = ""; // ex: "https://pay.hotmart.com/..."
 const PRICE: { de?: string; por?: string; parcelas?: string } = {}; // ex: { de: "R$ 97", por: "R$ 37", parcelas: "ou 5x de R$ 8,20" }
 const BONUS: { nome: string; descricao: string }[] = []; // bônus reais
 type Review = { nome: string; foto?: string; estrelas: number; texto: string };
-const REVIEWS: Review[] = []; // somente avaliações reais de compradores
+// EXEMPLOS de layout: troque por avaliações reais de compradores antes de anunciar.
+const REVIEWS: Review[] = [
+  { nome: "Exemplo — Juliana", estrelas: 5, texto: "Os cards de sinais vitais deixaram minha revisão para o estágio muito mais rápida." },
+  { nome: "Exemplo — Camila", estrelas: 5, texto: "Imprimi e deixo na mochila. As ilustrações ajudam demais a memorizar." },
+  { nome: "Exemplo — Rafael", estrelas: 5, texto: "Material muito organizado, encontro o assunto que preciso em segundos." },
+  { nome: "Exemplo — Patrícia", estrelas: 5, texto: "Uso pelo celular entre as aulas. Visual bonito e direto ao ponto." },
+];
 /* ============================================================= */
 
 const TITLE = "Enfermagem Visual — Kit com 200 Cards Ilustrativos";
@@ -100,7 +106,7 @@ function Carousel() {
       >
         <div className="flex transition-transform duration-700 ease-out" style={{ transform: `translateX(-${i * 100}%)` }}>
           {slides.map((s) => (
-            <button key={s.src} onClick={() => { stop(); setZoom(true); }} className="aspect-[4/5] w-full shrink-0 cursor-zoom-in bg-muted">
+            <button key={s.src} onClick={() => { stop(); setZoom(true); }} className="aspect-[4/3] w-full shrink-0 cursor-zoom-in bg-muted">
               <img src={s.src} alt={s.alt} className="h-full w-full object-contain" loading="lazy" />
             </button>
           ))}
@@ -142,7 +148,6 @@ function Index() {
     <main className="overflow-x-hidden pb-24 md:pb-0">
       {/* HERO */}
       <section className="relative bg-hero text-primary-foreground">
-        <img src={pln02.url} alt="" className="absolute inset-0 h-full w-full object-cover opacity-20 mix-blend-luminosity" />
         <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1.2fr_1fr] md:items-center md:py-20">
           <div>
             <div className="mb-6 flex items-center gap-2 font-display text-sm font-bold uppercase tracking-widest">
@@ -175,20 +180,20 @@ function Index() {
             <p className="mt-6 font-script text-2xl sm:text-3xl">Seu próximo passo nos estudos começa com uma revisão mais organizada. ♡</p>
             <CTA className="mt-8">Quero meu kit completo</CTA>
           </div>
-          <img src={capa.url} alt="Capa oficial Enfermagem Visual" className="mx-auto w-full max-w-md rotate-2 rounded-2xl shadow-2xl" />
+          <img src={capa.url} alt="Capa oficial Enfermagem Visual" className="mx-auto w-full max-w-[260px] sm:max-w-xs rotate-2 rounded-2xl shadow-2xl" />
         </div>
       </section>
 
       {/* VITRINE */}
-      <section id="comprar" className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[1.3fr_1fr]">
+      <section id="comprar" className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-2 md:items-start">
         <div>
           <h2 className="text-2xl font-extrabold text-secondary sm:text-3xl">VEJA COMO É ESTUDAR COM O ENFERMAGEM VISUAL</h2>
           <p className="mb-6 mt-2 text-muted-foreground">Cada página reúne conteúdos ilustrados para facilitar sua rotina de revisão.</p>
-          <Carousel />
+          <div className="mx-auto max-w-lg"><Carousel /></div>
         </div>
         <div className="h-fit rounded-3xl border-2 border-primary/30 bg-card p-6 shadow-soft lg:sticky lg:top-6">
-          <img src={capa.url} alt="Capa do kit" className="w-full rounded-2xl" />
-          <h3 className="mt-6 text-2xl font-extrabold text-secondary">Enfermagem Visual — Kit com 200 Cards Ilustrativos</h3>
+          <div className="flex items-center gap-4"><img src={capa.url} alt="Capa do kit" className="h-24 w-24 shrink-0 rounded-xl object-cover shadow-soft" /><span className="rounded-full bg-gold px-3 py-1 text-xs font-bold uppercase text-accent-foreground">Kit completo + bônus</span></div>
+          <h3 className="mt-5 text-2xl font-extrabold text-secondary">Enfermagem Visual — Kit com 200 Cards Ilustrativos</h3>
           {REVIEWS.length > 0 && (
             <div className="mt-2 flex items-center gap-1 text-accent">
               {[...Array(5)].map((_, k) => <Star key={k} className="h-5 w-5 fill-current" />)}
@@ -202,7 +207,7 @@ function Index() {
           </p>
           <ul className="mt-5 space-y-2.5">
             {["200 cards ilustrativos", "10 categorias de estudo", "Material organizado por assuntos", "PDF para consulta digital e impressão", "Revisões rápidas para provas e estágios"].map((b) => (
-              <li key={b} className="flex items-center gap-2 font-medium"><CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />{b}</li>
+              <li key={b} className="flex items-center gap-3 rounded-xl bg-muted px-4 py-2.5 font-medium"><CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />{b}</li>
             ))}
           </ul>
           {BONUS.length > 0 && (
@@ -287,7 +292,7 @@ function Index() {
       {/* EMOCIONAL */}
       <section className="bg-hero text-primary-foreground">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-[1fr_1.4fr] md:items-center">
-          <img src={funil.url} alt="Estudante revisando com os cards impressos" className="w-full rounded-3xl shadow-2xl" loading="lazy" />
+          <img src={funil.url} alt="Estudante revisando com os cards impressos" className="mx-auto w-full max-w-sm rounded-3xl shadow-2xl" loading="lazy" />
           <div>
             <h2 className="text-3xl font-extrabold leading-tight sm:text-4xl">MENOS TEMPO PROCURANDO CONTEÚDO. <span className="text-accent">MAIS PRATICIDADE PARA REVISAR.</span></h2>
             <p className="mt-5 text-lg text-secondary-foreground/90">
