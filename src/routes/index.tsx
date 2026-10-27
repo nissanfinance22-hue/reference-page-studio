@@ -9,6 +9,7 @@ import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
 import capa from "@/assets/CAPA.png.asset.json";
+import boxKit from "@/assets/box_kit_enfermaria.png.asset.json";
 import card03 from "@/assets/03_card.png.asset.json";
 import pln02 from "@/assets/PLN_02.png.asset.json";
 import funil from "@/assets/plr_funil.png.asset.json";
@@ -18,17 +19,97 @@ const assetUrl = (asset: { url: string }) =>
   new URL(asset.url, "https://reference-prompt-studio.lovable.app").href;
 
 /* ===== CONFIGURAÇÃO DA OFERTA — preencha com dados reais ===== */
-const CHECKOUT_URL = ""; // ex: "https://pay.hotmart.com/..."
-const PRICE: { de?: string; por?: string; parcelas?: string } = {}; // ex: { de: "R$ 97", por: "R$ 37", parcelas: "ou 5x de R$ 8,20" }
+const CHECKOUT_URL = "https://pay.cakto.com.br/47qiz8f_1248754";
+const PRICE: { de?: string; por?: string; parcelas?: string } = { de: "R$ 57,90", por: "R$ 17,90" };
+// Preencha com a DATA/HORA REAL de encerramento (ISO com fuso, por exemplo 2026-11-01T23:59:59-03:00).
+// Sem prazo real, o contador de 24 horas não é exibido. Não reinicia a cada visita.
+const PROMO_END_AT = "";
 const BONUS: { nome: string; descricao: string }[] = []; // bônus reais
-type Review = { nome: string; foto?: string; estrelas: number; texto: string };
-// EXEMPLOS de layout: troque por avaliações reais de compradores antes de anunciar.
-const REVIEWS: Review[] = [
-  { nome: "Exemplo — Juliana", estrelas: 5, texto: "Os cards de sinais vitais deixaram minha revisão para o estágio muito mais rápida." },
-  { nome: "Exemplo — Camila", estrelas: 5, texto: "Imprimi e deixo na mochila. As ilustrações ajudam demais a memorizar." },
-  { nome: "Exemplo — Rafael", estrelas: 5, texto: "Material muito organizado, encontro o assunto que preciso em segundos." },
-  { nome: "Exemplo — Patrícia", estrelas: 5, texto: "Uso pelo celular entre as aulas. Visual bonito e direto ao ponto." },
+type ExampleComment = { titulo: string; texto: string };
+const EXAMPLE_COMMENTS: ExampleComment[] = [
+  {
+    "titulo": "Exemplo ilustrativo 01",
+    "texto": "Gostaria de revisar sinais vitais com ilustrações e explicações curtas."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 02",
+    "texto": "Ter os assuntos divididos por categoria pode facilitar a organização."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 03",
+    "texto": "Uma folha visual ajuda a localizar rapidamente o tema que quero revisar."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 04",
+    "texto": "Acho prático conseguir estudar pelo celular nos intervalos."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 05",
+    "texto": "Ter opção de imprimir os cards pode ajudar na preparação para provas."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 06",
+    "texto": "Prefiro esquemas coloridos para relembrar os conceitos."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 07",
+    "texto": "Uma coleção por assunto pode tornar a revisão mais direcionada."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 08",
+    "texto": "Gosto de materiais que apresentam informações de forma objetiva."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 09",
+    "texto": "Ver exemplos ilustrados ajuda a conectar teoria e prática."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 10",
+    "texto": "É bom ter uma opção de estudo que não dependa de vídeo."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 11",
+    "texto": "A organização do conteúdo faz diferença para criar rotina."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 12",
+    "texto": "Os temas de biossegurança são importantes na minha revisão."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 13",
+    "texto": "Gostaria de revisar anatomia com imagens e legendas."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 14",
+    "texto": "Praticar questões visuais parece uma forma interessante de aprender."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 15",
+    "texto": "A possibilidade de imprimir me permite montar fichas de estudo."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 16",
+    "texto": "É útil consultar conteúdos essenciais antes de um estágio."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 17",
+    "texto": "Um PDF organizado pode ajudar a revisar de onde estiver."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 18",
+    "texto": "Prefiro revisar um assunto de cada vez para manter o foco."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 19",
+    "texto": "Cards ilustrados podem deixar o processo de estudo mais agradável."
+  },
+  {
+    "titulo": "Exemplo ilustrativo 20",
+    "texto": "É interessante ter os tópicos de enfermagem reunidos num só material."
+  }
 ];
+// Estes 20 textos são exemplos de layout, NÃO são depoimentos de compradores.
+// Substitua por depoimentos reais com autorização antes de apresentar como prova social.
 /* ============================================================= */
 
 const TITLE = "Enfermagem Visual — Kit com 200 Cards Ilustrativos";
@@ -149,6 +230,78 @@ function Carousel() {
   );
 }
 
+
+function PromoCountdown() {
+  const [remaining, setRemaining] = useState<number | null>(null);
+  useEffect(() => {
+    if (!PROMO_END_AT) return;
+    const deadline = new Date(PROMO_END_AT).getTime();
+    if (!Number.isFinite(deadline)) return;
+    const update = () => setRemaining(Math.max(0, Math.ceil((deadline - Date.now()) / 1000)));
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  if (remaining === null) return null;
+  if (remaining <= 0) return <p className="mt-3 text-sm font-bold text-destructive">Prazo desta campanha encerrado. Confira a oferta atual no checkout.</p>;
+  const hours = Math.floor(remaining / 3600);
+  const minutes = Math.floor((remaining % 3600) / 60);
+  const seconds = remaining % 60;
+  const two = (n: number) => String(n).padStart(2, "0");
+  return (
+    <div className="mt-4 rounded-xl bg-secondary px-4 py-3 text-secondary-foreground">
+      <p className="text-xs font-bold">Esta campanha termina em</p>
+      <p role="timer" aria-label="Tempo restante da oferta" className="mt-1 font-display text-2xl font-bold tabular-nums">{two(hours)}:{two(minutes)}:{two(seconds)}</p>
+    </div>
+  );
+}
+
+function ExampleCommentsCarousel() {
+  const [position, setPosition] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => setPosition((n) => (n + 1) % EXAMPLE_COMMENTS.length), 5500);
+    return () => clearInterval(interval);
+  }, []);
+  const visible = [0, 1, 2].map((offset) => ({
+    ...EXAMPLE_COMMENTS[(position + offset) % EXAMPLE_COMMENTS.length]!,
+    number: (position + offset) % EXAMPLE_COMMENTS.length + 1,
+  }));
+  const move = (offset: number) => setPosition((n) => (n + offset + EXAMPLE_COMMENTS.length) % EXAMPLE_COMMENTS.length);
+  return (
+    <section className="bg-muted py-16" aria-label="Comentários de demonstração">
+      <div className="mx-auto max-w-6xl px-5">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-extrabold text-secondary sm:text-3xl">IMAGINE SEUS MOMENTOS DE REVISÃO</h2>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+              Frases ilustrativas sobre estudar com cards. Estes são exemplos fictícios de apresentação — não são avaliações de clientes.
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button type="button" aria-label="Comentário anterior" onClick={() => move(-1)} className="grid h-11 w-11 place-items-center rounded-full border border-border bg-card text-secondary hover:border-primary"><ChevronLeft /></button>
+            <button type="button" aria-label="Próximo comentário" onClick={() => move(1)} className="grid h-11 w-11 place-items-center rounded-full border border-border bg-card text-secondary hover:border-primary"><ChevronRight /></button>
+          </div>
+        </div>
+        <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
+          {visible.map((item, i) => (
+            <article key={item.number} className={`rounded-2xl border border-border bg-card p-6 shadow-soft ${i > 0 ? "hidden md:block" : ""}`}>
+              <div className="mb-4 flex items-center gap-3">
+                <div aria-hidden="true" className="grid h-12 w-12 place-items-center rounded-full bg-primary/15 text-primary"><UserRound className="h-6 w-6" /></div>
+                <div>
+                  <p className="font-bold text-secondary">{item.titulo}</p>
+                  <p className="text-xs text-muted-foreground">Simulação de texto · não verificado</p>
+                </div>
+              </div>
+              <p className="min-h-16 text-sm leading-relaxed text-foreground">“{item.texto}”</p>
+            </article>
+          ))}
+        </div>
+        <p className="mt-4 text-right text-xs text-muted-foreground">Exemplo {position + 1} de {EXAMPLE_COMMENTS.length} · substitua por opiniões reais e autorizadas após as primeiras vendas.</p>
+      </div>
+    </section>
+  );
+}
+
 function Index() {
   return (
     <main className="overflow-x-hidden pb-24 md:pb-0">
@@ -160,7 +313,7 @@ function Index() {
               <HeartPulse className="h-7 w-7 text-accent" /> Enfermagem Visual
             </div>
             <span className="inline-block -rotate-1 rounded-lg bg-gold px-4 py-1 font-display text-lg font-extrabold text-accent-foreground sm:text-2xl">
-              KIT COMPLETO + BÔNUS
+              {BONUS.length ? "KIT COMPLETO + BÔNUS" : "KIT COMPLETO"}
             </span>
             <h1 className="mt-3 text-5xl font-extrabold leading-none tracking-tight sm:text-7xl">ENFERMAGEM VISUAL</h1>
             <span className="mt-3 inline-block rotate-1 rounded-lg bg-gold px-4 py-1 font-display text-xl font-extrabold text-accent-foreground sm:text-3xl">
@@ -186,7 +339,7 @@ function Index() {
             <p className="mt-6 font-script text-2xl sm:text-3xl">Seu próximo passo nos estudos começa com uma revisão mais organizada. ♡</p>
             <CTA className="mt-8">Quero meu kit completo</CTA>
           </div>
-          <img src={assetUrl(capa)} alt="Capa oficial Enfermagem Visual" className="mx-auto w-full max-w-[260px] sm:max-w-xs rotate-2 rounded-2xl shadow-2xl" />
+          <img src={assetUrl(boxKit)} alt="Box oficial do Enfermagem Visual" className="animate-box-float mx-auto w-full max-w-[300px] object-contain drop-shadow-2xl sm:max-w-md" />
         </div>
       </section>
 
@@ -198,16 +351,18 @@ function Index() {
           <div className="mx-auto max-w-lg"><Carousel /></div>
         </div>
         <div className="h-fit rounded-3xl border-2 border-primary/30 bg-card p-6 shadow-soft lg:sticky lg:top-6">
-          <div className="flex items-center gap-4"><img src={assetUrl(capa)} alt="Capa do kit" className="h-24 w-24 shrink-0 rounded-xl object-cover shadow-soft" /><span className="rounded-full bg-gold px-3 py-1 text-xs font-bold uppercase text-accent-foreground">Kit completo + bônus</span></div>
-          <h3 className="mt-5 text-2xl font-extrabold text-secondary">Enfermagem Visual — Kit com 200 Cards Ilustrativos</h3>
-          {REVIEWS.length > 0 && (
-            <div className="mt-2 flex items-center gap-1 text-accent">
-              {[...Array(5)].map((_, k) => <Star key={k} className="h-5 w-5 fill-current" />)}
-              <span className="ml-2 font-bold text-foreground">
-                {(REVIEWS.reduce((a, r) => a + r.estrelas, 0) / REVIEWS.length).toFixed(1)}
-              </span>
+          <div className="relative mx-auto w-full max-w-[360px]">
+            <img src={assetUrl(boxKit)} alt="Box premium do Kit Enfermagem Visual — 200 cards ilustrativos" className="animate-box-float mx-auto w-full object-contain drop-shadow-2xl" />
+            <div className="absolute bottom-2 right-0 rounded-2xl border border-white/80 bg-card/95 px-4 py-3 text-center shadow-xl backdrop-blur">
+              <p className="text-[11px] font-extrabold uppercase tracking-wider text-primary">Super oferta</p>
+              <p className="text-sm text-muted-foreground">De <span className="line-through">{PRICE.de}</span></p>
+              <p className="font-display text-3xl font-extrabold leading-tight text-primary">{PRICE.por}</p>
             </div>
-          )}
+          </div>
+          <span className="mt-3 inline-flex rounded-full bg-gold px-3 py-1 text-xs font-bold uppercase text-accent-foreground">
+            {BONUS.length ? "Kit completo + bônus" : "Kit completo — 200 cards"}
+          </span>
+          <h3 className="mt-5 text-2xl font-extrabold text-secondary">Enfermagem Visual — Kit com 200 Cards Ilustrativos</h3>
           <p className="mt-3 text-muted-foreground">
             Um material digital para quem deseja revisar conteúdos essenciais de enfermagem com ilustrações, esquemas e explicações objetivas.
           </p>
@@ -223,10 +378,13 @@ function Index() {
             </div>
           )}
           {PRICE.por && (
-            <div className="mt-6 text-center">
-              {PRICE.de && <p className="text-muted-foreground line-through">De {PRICE.de}</p>}
-              <p className="font-display text-4xl font-extrabold text-primary">{PRICE.por}</p>
+            <div className="mt-6 rounded-2xl border-2 border-primary/20 bg-muted p-5 text-center">
+              <p className="font-display text-xs font-extrabold uppercase tracking-widest text-secondary">Super oferta especial</p>
+              {PRICE.de && <p className="mt-2 text-muted-foreground">De <span className="line-through">{PRICE.de}</span></p>}
+              <p className="font-display mt-1 text-5xl font-extrabold text-primary">{PRICE.por}</p>
               {PRICE.parcelas && <p className="text-sm text-muted-foreground">{PRICE.parcelas}</p>}
+              <p className="mt-2 text-xs text-muted-foreground">Preço informado pelo vendedor. O valor definitivo é confirmado no checkout.</p>
+              <PromoCountdown />
             </div>
           )}
           <CTA className="mt-6 w-full">Quero meu kit completo</CTA>
@@ -258,26 +416,8 @@ function Index() {
         </div>
       </section>
 
-      {/* AVALIAÇÕES — exibe apenas avaliações reais */}
-      {REVIEWS.length > 0 && (
-        <section className="mx-auto max-w-6xl px-5 py-16">
-          <h2 className="text-2xl font-extrabold text-secondary sm:text-3xl">O QUE ESTÃO ACHANDO DO ENFERMAGEM VISUAL?</h2>
-          <div className="mt-8 flex snap-x gap-5 overflow-x-auto pb-4">
-            {REVIEWS.map((r) => (
-              <div key={r.nome} className="w-72 shrink-0 snap-start rounded-2xl border border-border bg-card p-5 shadow-soft">
-                <div className="flex items-center gap-3">
-                  {r.foto && <img src={r.foto} alt="" className="h-12 w-12 rounded-full object-cover" />}
-                  <div>
-                    <p className="font-bold">{r.nome}</p>
-                    <div className="flex text-accent">{[...Array(r.estrelas)].map((_, k) => <Star key={k} className="h-4 w-4 fill-current" />)}</div>
-                  </div>
-                </div>
-                <p className="mt-3 text-sm">“{r.texto}”</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* Demonstração de comentários; não representa compradores reais */}
+      <ExampleCommentsCarousel />
 
       {/* CATEGORIAS */}
       <section className="mx-auto max-w-6xl px-5 py-16">
